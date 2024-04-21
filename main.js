@@ -1,4 +1,18 @@
-function Validator(formSelector) {
+function Validator(formSelector,options) {
+    // gắn giá trị mặc định cho tham số ES5
+    if (!options) {
+        options = {};
+    }
+
+    function getParent(element,selector) {
+        while(element.parentElement){
+            if (element.parentElement.matches(selector)) {
+                return element.parentElement;
+            }
+            element = element.parentElement;
+        }
+    }
+
     var formRules = {
 
     };
@@ -67,7 +81,87 @@ function Validator(formSelector) {
 
                 // console.log(rule);
             }
+
+
+            // lắng nghe sự kiến để validator (blur, change,...)
+
+            input.onblur = handleValidate;
+            input.oninput = handleClearError;
         }
+
+        // hàm thực hiện validator
+        function handleValidate(event){
+            console.log(event.target.value);
+
+            var rules = formRules[event.target.name];
+            var errorMessage;
+            rules.find(function (rule) {
+                errorMessage = rule(event.target.value);
+                return errorMessage;
+            });
+
+            // nếu có lỗi thì hiển thị UI
+            if (errorMessage) {
+                // console.log(event.target);
+                var formGroup = getParent(event.target,'.form-group');
+                // console.log(formGroup);
+                if (formGroup) {
+                    formGroup.classList.add('invalid');
+                    var formMessage = formGroup.querySelector('.form-message');
+                    if (formMessage) {
+                        formMessage.innerText = errorMessage;
+                    }
+                }
+            }
+
+            // console.log(errorMessage);
+            return !errorMessage;
+        }
+
+        // hàm clear message error
+        function handleClearError(event) {
+            var formGroup = getParent(event.target,'.form-group');
+            if (formGroup.classList.contains('invalid')) {
+                formGroup.classList.remove('invalid');
+
+                var formMessage = formGroup.querySelector('.form-message');
+                if (formMessage) {
+                    formMessage.innerText = '';
+                }
+            }
+        }
+
         console.log(formRules);
+    }
+
+    formElement.onsubmit = function (event) {
+        event.preventDefault();
+        var inputs = formElement.querySelectorAll('[name][rules]');
+        var isValid = true;
+        for (var input of inputs) {
+            console.log(input.value.name);
+
+             if (!handleValidate({target : input})) {
+                isValid = false;
+             } 
+
+        }
+        
+
+        // khi không có lỗi thì submit form
+        if (isValid) {
+            debugger
+            
+            if (typeof options.onSubmit === "function") {
+                options.onSubmit();
+            }
+            else
+            {
+                formElement.submit();   
+            }
+            
+            
+        }
+
     }
 }

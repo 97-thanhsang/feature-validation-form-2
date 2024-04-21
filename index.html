@@ -17,25 +17,25 @@
       
           <div class="form-group">
             <label for="fullname" class="form-label">Tên đầy đủ</label>
-            <input id="fullname" name="fullname" type="text" placeholder="VD: Sơn Đặng" class="form-control">
+            <input rules="required" id="fullname" name="fullname" type="text" placeholder="VD: Sơn Đặng" class="form-control">
             <span class="form-message"></span>
           </div>
       
           <div class="form-group">
             <label for="email" class="form-label">Email</label>
-            <input id="email" name="email" type="text" placeholder="VD: email@domain.com" class="form-control">
+            <input rules="required|email" id="email" name="email" type="text" placeholder="VD: email@domain.com" class="form-control">
             <span class="form-message"></span>
           </div>
       
           <div class="form-group">
             <label for="password" class="form-label">Mật khẩu</label>
-            <input id="password" name="password" type="password" placeholder="Nhập mật khẩu" class="form-control">
+            <input rules="required|min:6" id="password" name="password" type="password" placeholder="Nhập mật khẩu" class="form-control">
             <span class="form-message"></span>
           </div>
       
           <div class="form-group">
             <label for="password_confirmation" class="form-label">Nhập lại mật khẩu</label>
-            <input id="password_confirmation" name="password_confirmation" placeholder="Nhập lại mật khẩu" type="password" class="form-control">
+            <input rules="required" id="password_confirmation" name="password_confirmation" placeholder="Nhập lại mật khẩu" type="password" class="form-control">
             <span class="form-message"></span>
           </div>
           <div class="form-group">
@@ -75,7 +75,7 @@
           </div>
           <div class="form-group">
             <label for="avatar" class="form-label">Ảnh đại diện</label>
-            <input type="file" name="avatar" id="avatar" class="form-control">
+            <input rules="required" type="file" name="avatar" id="avatar" class="form-control">
             
             <span class="form-message"></span>
           </div>
@@ -88,7 +88,7 @@
       </div>
     <script src="main.js" ></script>
     <script>
-        
+        Validator('#form-1');
     </script>
 </body>
 </html>

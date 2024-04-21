@@ -1,8 +1,9 @@
-function Validator(formSelector,options) {
-    // gắn giá trị mặc định cho tham số ES5
-    if (!options) {
-        options = {};
-    }
+function Validator(formSelector,) {
+    
+    var _this = this;
+
+    var formRules = {};
+
 
     function getParent(element,selector) {
         while(element.parentElement){
@@ -13,9 +14,6 @@ function Validator(formSelector,options) {
         }
     }
 
-    var formRules = {
-
-    };
     /**
      * Quy ước tạo rule
      * -   Nếu có lỗi thì return 'error'
@@ -91,14 +89,18 @@ function Validator(formSelector,options) {
 
         // hàm thực hiện validator
         function handleValidate(event){
-            console.log(event.target.value);
+            // console.log(event.target.value);
 
             var rules = formRules[event.target.name];
             var errorMessage;
-            rules.find(function (rule) {
+
+            for (var rule of rules) {
                 errorMessage = rule(event.target.value);
-                return errorMessage;
-            });
+                if (errorMessage) {
+                    break;
+                }
+            }
+            
 
             // nếu có lỗi thì hiển thị UI
             if (errorMessage) {
@@ -136,23 +138,22 @@ function Validator(formSelector,options) {
 
     formElement.onsubmit = function (event) {
         event.preventDefault();
+
         var inputs = formElement.querySelectorAll('[name][rules]');
         var isValid = true;
         for (var input of inputs) {
-            console.log(input.value.name);
+            // console.log(input.value.name);
 
              if (!handleValidate({target : input})) {
                 isValid = false;
              } 
 
-        }
-        
+        }       
 
         // khi không có lỗi thì submit form
         if (isValid) {
-            debugger
             
-            if (typeof options.onSubmit === "function") {
+            if (typeof _this.onSubmit === "function") {
                 var enableInputs = formElement.querySelectorAll('[name]:not([disabled])');
 
                     var formValues = Array.from(enableInputs)
@@ -185,7 +186,7 @@ function Validator(formSelector,options) {
                         return values;
                     },{});
                 console.log(formValues);
-                options.onSubmit(formValues);
+                _this.onSubmit(formValues);
             }
             else
             {

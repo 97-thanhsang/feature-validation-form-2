@@ -88,11 +88,17 @@
       </div>
     <script src="main.js" ></script>
     <script>
-        Validator('#form-1',{
-            onSubmit : function () {
-                console.log(1);
-            }
-        });
+        // Validator('#form-1',{
+        //     onSubmit : function () {
+        //         console.log(1);
+        //     }
+        // });
+
+        var form = new Validator('#form-1');
+        form.onSubmit = function (formData) {
+            // call api
+            // console.log(formData);
+        }
         
     </script>
 </body>
